@@ -19,6 +19,14 @@ let s3 = takes_and_gives_back(s2);  // s2 is moved into
                                     // takes_and_gives_back, which also
                                     // moves its return value into s3
 
+// Below demostrates that I can keep on using variable str, if I pass it as a reference to a function.
+// I still retain the ownership in that scope.
+let str = String::from("Ni Hao, Buddy!");
+let lref = calculate_length_referencing(&str);
+println!("Length of String - {str} : {lref}");
+let (str2, l) = calculate_length(str);
+println!("Length of String - {str2} : {l}");
+
 } // Here, x goes out of scope, then s. But because s's value was moved, nothing
   // special happens. Here, s3 goes out of scope and is dropped. s2 was moved, so nothing happens. s1 goes out of scope and is dropped.
 
@@ -37,7 +45,7 @@ fn gives_ownership() -> String {             // gives_ownership will move its
 
 let some_string = String::from("yours"); // some_string comes into scope
 
-some_string                              // some_string is returned and
+    some_string                              // some_string is returned and
     // moves out to the calling
     // function
 }
@@ -50,4 +58,19 @@ a_string  // a_string is returned and moves out to the calling function
 }
 
 
-// Referencing
+// Referencing - This is important since taking ownership and then giving it back for every 
+// simple task invloving a variable that is passed to a function and to be used after the 
+// function call would make it very tedious. This is demostrated below:
+
+// Ownership Transfer method to calculate the length of a string.
+fn calculate_length(s: String) -> (String, usize){
+    let l = s.len();
+    (s, l)
+}
+
+// Referencing method to calculate the length of the string.
+fn calculate_length_referencing(s: &String) -> (usize){
+    let l = s.len();
+    l
+}
+
