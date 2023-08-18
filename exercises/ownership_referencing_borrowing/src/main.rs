@@ -21,11 +21,16 @@ let s3 = takes_and_gives_back(s2);  // s2 is moved into
 
 // Below demostrates that I can keep on using variable str, if I pass it as a reference to a function.
 // I still retain the ownership in that scope.
-let str = String::from("Ni Hao, Buddy!");
+let mut str = String::from("Ni Hao, Buddy!");
 let lref = calculate_length_referencing(&str);
 println!("Length of String - {str} : {lref}");
+append_to_string(&mut str);
+println!("New String -> {str}");
+
 let (str2, l) = calculate_length(str);
 println!("Length of String - {str2} : {l}");
+
+
 
 } // Here, x goes out of scope, then s. But because s's value was moved, nothing
   // special happens. Here, s3 goes out of scope and is dropped. s2 was moved, so nothing happens. s1 goes out of scope and is dropped.
@@ -74,3 +79,24 @@ fn calculate_length_referencing(s: &String) -> (usize){
     l
 }
 
+
+// Mutable References
+fn append_to_string(s: &mut String){
+    s.push_str("string");
+}
+
+
+// Dangling References - Rust ensures that we will not have dangling references.
+
+// dangle function will not compile. Comment below function to compile this code.
+fn dangle() -> &String {
+    let s = String::from("hello");
+
+    &s
+}
+
+fn no_dangle() -> String {
+    let s = String::from("hello");
+
+    s
+}
